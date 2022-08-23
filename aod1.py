@@ -20,7 +20,7 @@ import sys
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.pylab as pylab
-import h5py
+
 import datetime
 from urllib.request import urlopen
 import urllib.request
