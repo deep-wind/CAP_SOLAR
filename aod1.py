@@ -389,10 +389,10 @@ if st.button("Predict"):
 	    receivers = ['pramila.1901137@srec.ac.in',mail]
 
 	    message = """From: From SIX PETALS <pramila.1901137@srec.ac.in>
-	    Subject: Warning mail
+Subject: Warning mail
 
-	    Please update your installation system to minimize the loss.
-	    """
+Please update your installation system to minimize the loss.
+"""
 
 	    try:
 	       server =smtplib.SMTP_SSL("smtp.gmail.com", 465)   
