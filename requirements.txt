@@ -1,0 +1,11 @@
+pip
+streamlit
+numpy
+pandas
+xlrd
+openpyxl
+plotly
+matplotlib
+sklearn
+pyhdf
+fnmatchs
