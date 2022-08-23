@@ -1,4 +1,4 @@
-pip==22.2.2
+ --upgrade pip
 streamlit
 numpy
 pandas
