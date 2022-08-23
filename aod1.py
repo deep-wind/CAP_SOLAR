@@ -27,12 +27,22 @@ import urllib.request, json
 #import fnmatch
 import re
 import smtplib
+from PIL import Image
+
+
 
 from urllib.request import urlopen
+st.set_page_config(
+page_title=" CAP Solar ",
+page_icon="🌞"
+)
+
 opener = urllib.request.build_opener()
 opener.addheaders = [('Authorization', 'Bearer cHJhbWlsYV9tYW5pY2thdmFzYWthbjpjSEpoYldsc1lTNHhPVEF4TVRNM1FITnlaV011WVdNdWFXND06MTY2MTI1MTQxNDo4NTJjMWVhYzQyMWExMTNmOGI0ZGI4M2UxNTEwMzRiZTM3ZWZlNzlk')]
 urllib.request.install_opener(opener)
-
+st.markdown("<h1 style ='color:green; text_align:center;font-family:times new roman;font-weight: bold;font-size:20pt;'>Impact of Aerosols in Solar Power Generation </h1>", unsafe_allow_html=True) 
+image = Image.open('sunrise.jpg')
+st.image('aod.jpg')
 user_lat=st.text_input('\nPlease enter the latitude you would like to analyze (Deg. N): ')
 user_lon=st.text_input('Please enter the longitude you would like to analyze (Deg. E): ')
 plantsize_type= st.radio("Choose any one of Solar Panel Capacity you want to install",('Individual home/flat','Residential Flat','Commerical Industry'))
