@@ -417,7 +417,7 @@ Please update your installation system to minimize the loss.
 
 	    client = Client(account_sid, auth_token)
 	    message = client.messages.create(
-				 body='Hello there from pramila',
+				 body='Please update your installation system to minimize the loss.',
 				 from_ =  "+12057549967",
 				 to = "+917339244868"
 			     )
