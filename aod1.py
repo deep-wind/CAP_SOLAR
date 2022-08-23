@@ -28,8 +28,7 @@ import urllib.request, json
 import re
 import smtplib
 from PIL import Image
-
-
+from twilio.rest import Client
 
 from urllib.request import urlopen
 st.set_page_config(
@@ -413,9 +412,17 @@ Please update your installation system to minimize the loss.
 	       print ("Successfully sent email")
 	    except Exception as e:
 	       print ("Error: unable to send email",e)
+	    account_sid = "ACcebaf899ac73b0c205273410c2734d6b"
+	    auth_token = "6038894e58927b7f99b2e288166c4969"
 
+	    client = Client(account_sid, auth_token)
+	    message = client.messages.create(
+				 body='Hello there from pramila',
+				 from_ =  "+12057549967",
+				 to = "+917339244868"
+			     )
 
-
+	    st.write(message.sid)
 
                 
                 
