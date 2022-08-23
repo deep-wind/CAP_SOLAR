@@ -1,11 +1,11 @@
-python -m pip install --upgrade pip
+
 streamlit
 numpy
 pandas
-xlrd
+
 openpyxl
 plotly
 matplotlib
 sklearn
 pyhdf
-fnmatchs
+
