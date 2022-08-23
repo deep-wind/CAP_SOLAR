@@ -8,5 +8,6 @@ plotly
 matplotlib
 sklearn
 pyhdf
+secure-smtplib
 
 
