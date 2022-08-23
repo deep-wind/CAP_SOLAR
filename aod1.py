@@ -51,7 +51,7 @@ dt = datetime.datetime.strptime(date, fmt)
 tt = dt.timetuple()
 julian_day=tt.tm_yday
 st.write(julian_day)
-df = pd.read_csv(r"C:\Users\PRAMILA\Downloads\world-cities.csv")
+df = pd.read_csv("world-cities.csv")
 list1 = list(np.unique(df["name"].values))
 list2 = list(np.unique(df["country"].values))
 list3 = list(np.unique(df["subcountry"].astype(str).values))
@@ -77,7 +77,7 @@ if st.button("Predict"):
     i=0
     import os
     directory = str(julian_day)
-    parent_dir = "C:/Users/PRAMILA/.spyder-py3/project/sih/data/L3/"
+    parent_dir = "data/L3/"
     path = os.path.join(parent_dir, directory)
     st.write(path)
     if not os.path.exists(path):
@@ -182,8 +182,10 @@ if st.button("Predict"):
                 
                 
     df = pd.DataFrame(list(zip(datetime,aod_value)), columns=columns)
-    print(df)
-    df.to_csv(r"C:\Users\PRAMILA\.spyder-py3\project\sih\datas.csv")
+    st.write(df)
+	
+    df.to_csv("datas.csv")
+
     
     ### User Inputs
     AOD500nm=np.mean(aod_value)
@@ -344,7 +346,7 @@ if st.button("Predict"):
     
     ds['Dif Hz'] = ds['Global Hz']-ds['Direct Hz']
     
-    ds[11:15]
+    #ds[11:15]
     
     st.write(ds)
     pylab.rcParams['figure.figsize'] = 16, 6  # this sets the default image size for this session
