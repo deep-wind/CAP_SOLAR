@@ -41,7 +41,8 @@ if(plantsize_type=="Individual home/flat"):
 elif(plantsize_type=="Residential Flat"):
     plantsize=5    
 else:
-    plantsize=50      
+    plantsize=50   
+mail=st.text_input('Please enter your mail id: ')
 today = datetime.date.today()-datetime.timedelta(days=1)
 
 date = st.date_input('📅 Date', value = today,max_value=today)
@@ -51,14 +52,7 @@ dt = datetime.datetime.strptime(date, fmt)
 tt = dt.timetuple()
 julian_day=tt.tm_yday
 st.write(julian_day)
-df = pd.read_csv("world-cities.csv")
-list1 = list(np.unique(df["name"].values))
-list2 = list(np.unique(df["country"].values))
-list3 = list(np.unique(df["subcountry"].astype(str).values))
-locations = list1 + list2 + list3
 
-
-location_selector = st.selectbox("Select a Location",locations)
 
 if st.button("Predict"):
     user_lat=float(user_lat)
@@ -390,17 +384,14 @@ if st.button("Predict"):
    
     #NOTIFICATIONS
     if((plantsize==1 and monthly_savings<1050) or (plantsize==5 and monthly_savings<5050) or (plantsize==50 and monthly_savings<50050)):
-       
+	#mail='pramilamanickavasakan@gmail.com'
+	receivers = ['pramila.1901137@srec.ac.in',mail]
 
-        sender = 'pramila.1901137@srec.ac.in'
-        receivers = ['pramila.1901137@srec.ac.in']
-        
-        message = """From: From Person <pramila.1901137@srec.ac.in>
-        To: To Person <pramila.1901137@srec.ac.in>
-        Subject: SMTP e-mail test
-        This is a test e-mail message.
-        """
-        
+	message = """From: From SIX PETALS <pramila.1901137@srec.ac.in>
+	Subject: Warning mail
+
+	Please update your installation system to minimize the loss.
+	"""
         try:
            server =smtplib.SMTP_SSL("smtp.gmail.com", 465)   
            server.login("pramila.1901137@srec.ac.in","FEBprami@2002")
