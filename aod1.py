@@ -13,7 +13,6 @@ pd.options.display.max_rows = 9
 import streamlit as st
 from pyhdf.SD import SD, SDC
 
-import fnmatch
 
 import numpy as np
 import sys
