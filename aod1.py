@@ -24,8 +24,9 @@ import datetime
 from urllib.request import urlopen
 import urllib.request
 import urllib.request, json
-import fnmatch
+#import fnmatch
 import re
+import smtplib
 
 from urllib.request import urlopen
 opener = urllib.request.build_opener()
@@ -170,11 +171,18 @@ if st.button("Predict"):
                      	AOD500nm=round(data[x,y]*scale_factor,3)
                 aod_value.append(AOD500nm)
                 
-                date = re.compile("[0-9]{13}")
+                date = re.compile("A\d{7}")
                 date = date.search(filePath)
                 date=date.group(0)
-                date = rf'{date[4:7]}-{date[0:4]}-{date[7:9]}:{date[9:11]}:{date[11:13]}'
                 print(date)
+                
+                time = re.compile("\\.\d{4}")
+                time = time.search(filePath)
+                time=time.group(0)
+                print(time)
+                
+                date = rf'{date[5:8]}-{date[1:5]}-{time[1:3]}:{time[3:5]}'
+                
                 
                 datetime.append(date)
                 
@@ -379,6 +387,34 @@ if st.button("Predict"):
     #st.warning("Electricity Cost per Day: ₹ {}".format(round((solar_irradiance*9*24)/1000,2)))
     st.markdown(f"""<h1 style='text-align: left; font-weight:bold;color:black;background-color:pink;font-size:11pt;'>Annual savings: ₹ <mark style="background-color:white">{format(round(annual_savings,0))}</mark> </h1>""",unsafe_allow_html=True)
     #st.info("Electricity Cost per Month: ₹ {}".format(round((solar_irradiance*9*720)/1000,2)))
+   
+    #NOTIFICATIONS
+    if((plantsize==1 and monthly_savings<1050) or (plantsize==5 and monthly_savings<5050) or (plantsize==50 and monthly_savings<50050)):
+       
+
+        sender = 'pramila.1901137@srec.ac.in'
+        receivers = ['pramila.1901137@srec.ac.in']
+        
+        message = """From: From Person <pramila.1901137@srec.ac.in>
+        To: To Person <pramila.1901137@srec.ac.in>
+        Subject: SMTP e-mail test
+        This is a test e-mail message.
+        """
+        
+        try:
+           server =smtplib.SMTP_SSL("smtp.gmail.com", 465)   
+           server.login("pramila.1901137@srec.ac.in","FEBprami@2002")
+           
+        
+           server.sendmail(sender, receivers, message)         
+           st.success ("Successfully sent email")
+        except Exception as e:
+           st.error ("Error: unable to send email"+str(e))
+                
+                
+        	           
+        
+            
 	           
 
     
