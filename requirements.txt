@@ -8,4 +8,6 @@ plotly
 matplotlib
 sklearn
 pyhdf
-pycopy-fnmatch
+pycopy-fnmatch==0.5.2
+
+
