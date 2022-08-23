@@ -384,23 +384,29 @@ if st.button("Predict"):
    
     #NOTIFICATIONS
     if((plantsize==1 and monthly_savings<1050) or (plantsize==5 and monthly_savings<5050) or (plantsize==50 and monthly_savings<50050)):
-	#mail='pramilamanickavasakan@gmail.com'
-		receivers = ['pramila.1901137@srec.ac.in',mail]
+	    sender = 'pramila.1901137@srec.ac.in'
+	    #mail='pramilamanickavasakan@gmail.com'
+	    receivers = ['pramila.1901137@srec.ac.in',mail]
 
-		message = """From: From SIX PETALS <pramila.1901137@srec.ac.in>
-		Subject: Warning mail
+	    message = """From: From SIX PETALS <pramila.1901137@srec.ac.in>
+	    Subject: Warning mail
 
-		Please update your installation system to minimize the loss.
-		"""
-		try:
-		   server =smtplib.SMTP_SSL("smtp.gmail.com", 465)   
-		   server.login("pramila.1901137@srec.ac.in","FEBprami@2002")
+	    Please update your installation system to minimize the loss.
+	    """
+
+	    try:
+	       server =smtplib.SMTP_SSL("smtp.gmail.com", 465)   
+	       server.login("pramila.1901137@srec.ac.in","FEBprami@2002")
 
 
-		   server.sendmail(sender, receivers, message)         
-		   st.success ("Successfully sent email")
-		except Exception as e:
-		   st.error ("Error: unable to send email"+str(e))
+	       server.sendmail(sender, receivers, message)         
+	       print ("Successfully sent email")
+	    except Exception as e:
+	       print ("Error: unable to send email",e)
+
+
+
+
                 
                 
         	           
