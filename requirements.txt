@@ -9,6 +9,6 @@ matplotlib
 sklearn
 pyhdf
 secure-smtplib
-twilio
+
 
 
