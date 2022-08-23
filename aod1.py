@@ -84,7 +84,7 @@ if st.button("Predict"):
         os.mkdir(path)
     else:
         
-        if(len(fnmatch.filter(os.listdir(path), '*.*'))==155):
+        if(len(os.listdir(path))==155):
             pass
         else:
             with st.spinner("Downloading the data...."):
