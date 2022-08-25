@@ -177,17 +177,14 @@ if st.button("Predict"):
                      	AOD500nm=round(data[x,y]*scale_factor,3)
                 aod_value.append(AOD500nm)
                 
-                date = re.compile("A\d{7}")
-                date = date.search(filePath)
-                date=date.group(0)
-                print(date)
+
                 
                 time = re.compile("\\.\d{4}")
                 time = time.search(filePath)
                 time=time.group(0)
                 print(time)
                 
-                date = rf'{date[5:8]}-{date[1:5]}-{time[1:3]}:{time[3:5]}'
+                date = rf'{date-{time[1:3]}:{time[3:5]}'
                 
                 
                 datetime.append(date)
@@ -221,7 +218,7 @@ if st.button("Predict"):
     
     ### Day of the Year Column
     
-    n = 218 # julian day of the year
+    n = julian_day # julian day of the year
     n_hrly = list(pd.Series(n).repeat(24)) # julian day numbers repeated hourly to create 8760 datapoints in dataset
     
     ds = pd.DataFrame(n_hrly, columns=['DOY']) # create dataframe with julian days 
