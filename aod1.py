@@ -82,7 +82,9 @@ elif(plantsize_type=="Residential Flat"):
     plantsize=5    
 else:
     plantsize=50   
+area=st.number_input('Please enter the area of panel(in m2) :')
 mail=st.text_input('Please enter your mail id: ')
+
 today = datetime.date.today()-datetime.timedelta(days=1)
 
 date = st.date_input('📅 Date', value = today,max_value=today)
