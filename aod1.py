@@ -53,15 +53,15 @@ st.markdown("<h1 style='text-align: left; font-weight:bold;color:black;backgroun
 m = folium.Map()
 m.add_child(folium.LatLngPopup())
 map = st_folium(m, height=350, width=700)
-#try:
+try:
 
-user_lat=map['last_clicked']['lat']
-user_lon=map['last_clicked']['lng'] 
+	user_lat=map['last_clicked']['lat']
+	user_lon=map['last_clicked']['lng'] 
 
-st.write(user_lat)
-st.write(user_lon)
-#except:
-#	st.warning("No location choosen")
+	st.write(user_lat)
+	st.write(user_lon)
+except:
+	st.warning("No location choosen")
 # folium_static(m)
 # data = io.BytesIO()
 # m.save(data, close_file=False)
