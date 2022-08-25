@@ -221,8 +221,8 @@ if st.button("Predict"):
     df.to_csv("datas.csv")
 
     ### User Inputs
-     AOD500nm=np.mean(aod_value)
-     st.success("AOD Value {} ".format(round(AOD500nm,3)))
+    AOD500nm=np.mean(aod_value)
+    st.success("AOD Value {} ".format(round(AOD500nm,3)))
 #     phi = user_lat
 #     longitude = user_lon
 #     tz = -7
