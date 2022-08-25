@@ -29,6 +29,11 @@ import re
 import smtplib
 from PIL import Image
 from twilio.rest import Client
+import streamlit as st
+from streamlit_folium import folium_static
+from streamlit_folium import st_folium
+import folium
+import  io, sys, json
 
 from urllib.request import urlopen
 st.set_page_config(
@@ -42,9 +47,26 @@ urllib.request.install_opener(opener)
 st.markdown("<h1 style ='color:green; text_align:center;font-family:times new roman;font-weight: bold;font-size:20pt;'>Impact of Aerosols in Solar Power Generation </h1>", unsafe_allow_html=True) 
 image = Image.open('aod.jpg')
 st.image(image,width=150)
-user_lat=st.text_input('\nPlease enter the latitude you would like to analyze (Deg. N): ')
-user_lon=st.text_input('Please enter the longitude you would like to analyze (Deg. E): ')
-plantsize_type= st.radio("Choose any one of Solar Panel Capacity you want to install",('Individual home/flat','Residential Flat','Commerical Industry'))
+
+st.markdown("<h1 style='text-align: left; font-weight:bold;color:black;background-color:white;font-size:11pt;'> Choose any Location </h1>",unsafe_allow_html=True)
+try:
+	m = folium.Map()
+	m.add_child(folium.LatLngPopup())
+	map = st_folium(m, height=350, width=700)
+	user_lat=map['last_clicked']['lat']
+	user_lon=map['last_clicked']['lon'] 
+
+	st.write(user_lat)
+	st.write(user_lon)
+catch:
+	st.warning("No location choosen")
+# folium_static(m)
+# data = io.BytesIO()
+# m.save(data, close_file=False)
+# m.save("index.html")
+#user_lat=st.text_input('\nPlease enter the latitude you would like to analyze (Deg. N): ')
+#user_lon=st.text_input('Please enter the longitude you would like to analyze (Deg. E): ')
+plantsize_type= st.radio("Choose any one of map['last_clicked']['lat']Solar Panel Capacity you want to install",('Individual home/flat','Residential Flat','Commerical Industry'))
 if(plantsize_type=="Individual home/flat"):
     plantsize=1
 elif(plantsize_type=="Residential Flat"):
@@ -67,8 +89,8 @@ if st.button("Predict"):
     user_lat=float(user_lat)
     user_lon=float(user_lon)
     df_map = pd.DataFrame(np.random.randn(1000, 2) / [50, 50] + [user_lat,user_lon],columns=['lat', 'lon'])
-    st.markdown("<h1 style='text-align: left; font-weight:bold;color:black;background-color:white;font-size:11pt;'> Selected Location </h1>",unsafe_allow_html=True)
-    st.map(df_map)
+    #st.markdown("<h1 style='text-align: left; font-weight:bold;color:black;background-color:white;font-size:11pt;'> Selected Location </h1>",unsafe_allow_html=True)
+    #st.map(df_map)
     urlstr='https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/61/MOD04_L2/2022/{}.json'.format(julian_day)
     st.write(urlstr)
     urlpath =urlopen(urlstr)
