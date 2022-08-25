@@ -391,7 +391,7 @@ if st.button("Predict"):
     #print(min_index)
     #st.write(ds['Direct Beam'].mean())
     solar_irradiance=(ds['Dif Hz'].mean())+(ds['Dif Hz'].mean())
-    st.write("diffuse_solar_irradiance {} W/m2".format(solar_irradiance))
+    st.info("Solar Irradiance {} W/m2".format(solar_irradiance))
     #solar_irradiance=ds['ETR'].mean()-diffuse_solar_irradiance
     
     #plantsize=2#46kw
