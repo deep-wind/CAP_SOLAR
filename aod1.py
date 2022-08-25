@@ -120,7 +120,7 @@ if st.button("Predict"):
     if not os.path.exists(path):
         os.mkdir(path)
     else:
-    	if(len(os.listdir(directory_path))>150):
+    	if(len(os.listdir(path))>150):
     	   pass
     	else:
     	   with st.spinner("Downloading the data...."):
