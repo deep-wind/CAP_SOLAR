@@ -139,10 +139,9 @@ if st.button("Predict"):
     columns=['DATETIME','AOD']
 
     for root, dirs, files in os.walk(path+"/"):
-	for file in files:
+    	for file in files:
 	    if os.path.splitext(file)[1] == '.hdf':
 		filePath = os.path.join(root, file)
-
 		hdf= SD(filePath, SDC.READ)
 		sds=hdf.select('AOD_550_Dark_Target_Deep_Blue_Combined')
 		data=sds.get()
