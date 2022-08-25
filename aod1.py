@@ -403,7 +403,7 @@ if st.button("Predict"):
     #savings
     electricity_per_unit=8#8/kwh
     loss=1-((ds['irradiance'].min())/(ds['irradiance'].max())
-    st.success("Loss percent {} %".format(round(loss,3)))	    
+    st.info("Loss percent {} %".format(loss))	    
 				      
     monthly_savings=(total_electricity/12)*electricity_per_unit
     annual_savings=(total_electricity)*electricity_per_unit
