@@ -56,7 +56,7 @@ map = st_folium(m, height=350, width=700)
 #try:
 
 user_lat=map['last_clicked']['lat']
-user_lon=map['last_clicked']['lon'] 
+user_lon=map['last_clicked']['lng'] 
 
 st.write(user_lat)
 st.write(user_lon)
