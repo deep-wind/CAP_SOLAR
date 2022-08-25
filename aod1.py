@@ -58,7 +58,7 @@ try:
 
 	st.write(user_lat)
 	st.write(user_lon)
-catch:
+catch(Exception):
 	st.warning("No location choosen")
 # folium_static(m)
 # data = io.BytesIO()
