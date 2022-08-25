@@ -372,8 +372,9 @@ if st.button("Predict"):
     
     ds['Direct Hz'] = ds['IdnH']
 	
-    ds['Dif Hz'] = ds['Global Hz']-ds['Direct Hz']
+
     ds['Global Hz'] = ds['GH']
+    ds['Dif Hz'] = ds['Global Hz']-ds['Direct Hz']
     ds['irradiance'] = ds['Direct Hz']+ ds['Global Hz']
     
     
@@ -393,6 +394,7 @@ if st.button("Predict"):
     #st.write(ds['Direct Beam'].mean())
     solar_irradiance=(ds['Dif Hz'].mean())+(ds['Direct Hz'].mean())
     st.info("Solar Irradiance {} W/m2".format(solar_irradiance))
+
     #solar_irradiance=ds['ETR'].mean()-diffuse_solar_irradiance`
 	
     
@@ -400,7 +402,9 @@ if st.button("Predict"):
     total_electricity=solar_irradiance*0.0036*1.1*plantsize*300
     #savings
     electricity_per_unit=8#8/kwh
-    
+    loss=1-((ds['irradiance'].min())/(ds['irradiance'].max())
+    st.error("Loss percent {}%'.format(round(loss,3)))	    
+				      
     monthly_savings=(total_electricity/12)*electricity_per_unit
     annual_savings=(total_electricity)*electricity_per_unit
     
