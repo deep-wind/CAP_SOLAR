@@ -375,7 +375,7 @@ if st.button("Predict"):
 
     ds['Global Hz'] = ds['GH']
     ds['Dif Hz'] = ds['Global Hz']-ds['Direct Hz']
-    ds['irradiance'] = ds['Direct Hz']+ ds['Global Hz']
+    ds['irradiance'] = ds['Direct Hz']+ ds['Dif Hz']
     
     
     #ds[11:15]
@@ -393,13 +393,13 @@ if st.button("Predict"):
     #print(min_index)
     #st.write(ds['Direct Beam'].mean())
     solar_irradiance=(ds['Dif Hz'].mean())+(ds['Direct Hz'].mean())
-    st.info("Solar Irradiance {} W/m2".format(solar_irradiance))
+    st.info("Avg Solar Irradiance {} W/m2".format(solar_irradiance))
 
     #solar_irradiance=ds['ETR'].mean()-diffuse_solar_irradiance`
 	
     
     #plantsize=2#46kw
-    total_electricity=solar_irradiance*0.0036*1.1*plantsize*300
+    total_electricity=solar_irradiance*0.0036*0.75*plantsize*area
     #savings
     electricity_per_unit=8#8/kwh
     loss=1-((ds['irradiance'].min())/(ds['irradiance'].max()))
