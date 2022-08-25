@@ -10,5 +10,5 @@ sklearn
 pyhdf
 secure-smtplib
 twilio
-folium
+streamlit_folium
 
