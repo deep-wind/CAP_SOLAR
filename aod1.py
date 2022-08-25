@@ -101,7 +101,7 @@ if st.button("Predict"):
     print(data)
     print("***************************************************************")
     
-    file_list = list(map(lambda x : x['name'], data))
+    file_list = [x['name'] for x in data if 'name' in x]
     print(f'Print Title --> {file_list}')
     print(len(file_list))
     i=0
