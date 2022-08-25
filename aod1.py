@@ -390,9 +390,9 @@ if st.button("Predict"):
     #min_index=ds['Direct Beam'].argmin()
     #print(min_index)
     #st.write(ds['Direct Beam'].mean())
-    diffuse_solar_irradiance=ds['Dif Hz'].mean()
+    solar_irradiance=(ds['Dif Hz'].mean())+(ds['Dif Hz'].mean())
     st.write("diffuse_solar_irradiance {} W/m2".format(diffuse_solar_irradiance))
-    solar_irradiance=ds['ETR'].mean()-diffuse_solar_irradiance
+    #solar_irradiance=ds['ETR'].mean()-diffuse_solar_irradiance
     
     #plantsize=2#46kw
     total_electricity=solar_irradiance*0.0036*1.1*plantsize*300
@@ -403,7 +403,7 @@ if st.button("Predict"):
     annual_savings=(total_electricity)*electricity_per_unit
     
 
-    st.success("Total electricity from solar plant(Annually) {} kW".format(round(solar_irradiance,2)))
+    st.success("Total electricity from solar plant per day {} kW".format(round(total_electricity,2)))
     st.write("1 Unit Cost:₹8")
     st.info("FINANCIAL SAVINGS")
     st.markdown(f"""<h1 style='text-align: left; font-weight:bold;color:black;background-color:yellow;font-size:11pt;'>Monthly savings: ₹ <mark style="background-color:white">{format(round(monthly_savings,0))} </mark> </h1>""",unsafe_allow_html=True)
