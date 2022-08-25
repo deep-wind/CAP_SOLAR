@@ -211,18 +211,14 @@ if st.button("Predict"):
     	    	datetime.append(date1)
 
 
-
     df = pd.DataFrame(list(zip(datetime,aod_value)), columns=columns)
+    df.drop(df[df['AOD'] == 0.0].index, inplace = True)
     st.write(df)
-
     df.to_csv("datas.csv")
-
+    
     ### User Inputs
-    AOD500nm=np.mean(aod_value)
-    st.success("AOD Value {} ".format(round(AOD500nm,3)))
-
-    ### User Inputs
-    AOD500nm=np.mean(aod_value)
+    st.write(df["AOD"].size)
+    AOD500nm=(df["AOD"].sum())/(df["AOD"].size)
     st.success("AOD Value {} ".format(round(AOD500nm,3)))
     phi = user_lat
     longitude = user_lon
