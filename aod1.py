@@ -120,7 +120,6 @@ if st.button("Predict"):
     if not os.path.exists(path):
         os.mkdir(path)
     else:
-
 	if(len(os.listdir(path))>150):
 	    pass
 	else:
