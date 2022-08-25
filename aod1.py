@@ -141,82 +141,74 @@ if st.button("Predict"):
     for root, dirs, files in os.walk(path+"/"):
     	for file in files:
     	    if os.path.splitext(file)[1] == '.hdf':
-			filePath = os.path.join(root, file)
-			hdf= SD(filePath, SDC.READ)
-			sds=hdf.select('AOD_550_Dark_Target_Deep_Blue_Combined')
-			data=sds.get()
+    	    	filePath = os.path.join(root, file)
+    	    	hdf= SD(filePath, SDC.READ)
+    	    	sds=hdf.select('AOD_550_Dark_Target_Deep_Blue_Combined')
+    	    	data=sds.get()
 
 
 			# Get lat and lon info
-			lat = hdf.select('Latitude')
-			latitude = lat[:,:]
-			print("latitude: ",latitude)
+    	    	lat = hdf.select('Latitude')
+    	    	latitude = lat[:,:]
+    	    	print("latitude: ",latitude)
 
-			min_lat=latitude.min()
-			max_lat=latitude.max()
-			print("min_lat: ",min_lat)
-			print("max_lat: ",max_lat)
+    	    	min_lat=latitude.min()
+    	    	max_lat=latitude.max()
+    	    	print("min_lat: ",min_lat)
+    	    	print("max_lat: ",max_lat)
 
-			lon = hdf.select('Longitude')
-			longitude = lon[:,:]
-			min_lon=longitude.min()
-			max_lon=longitude.max()
+    	    	lon = hdf.select('Longitude')
+    	    	longitude = lon[:,:]
+    	    	min_lon=longitude.min()
+    	    	max_lon=longitude.max()
 
-			attributes=sds.attributes()
-			scale_factor=attributes['scale_factor']
-			print("scale_factor  ",scale_factor)
-			fillvalue=attributes['_FillValue']
+    	    	attributes=sds.attributes()
+    	    	scale_factor=attributes['scale_factor']
+    	    	print("scale_factor  ",scale_factor)
+    	    	fillvalue=attributes['_FillValue']
 
-			user_lat=float(user_lat)
-			user_lon=float(user_lon)
+    	    	user_lat=float(user_lat)
+    	    	user_lon=float(user_lon)
 			#calculation to find nearest point in data to entered location (haversine formula)
-			R=6371000#radius of the earth in meters
+    	    	R=6371000#radius of the earth in meters
 
 			#degree to radians
 
-			lat1=np.radians(user_lat)
-			print("lat1: ",lat1)
+    	    	lat1=np.radians(user_lat)
+    	    	print("lat1: ",lat1)
 
-			lat2=np.radians(latitude)
-			print("lat2: ",lat2)
+    	    	lat2=np.radians(latitude)
+    	    	print("lat2: ",lat2)
 
-			delta_lat=np.radians(latitude-user_lat)
-			print("delta_lat: ",delta_lat)
+    	    	delta_lat=np.radians(latitude-user_lat)
+    	    	print("delta_lat: ",delta_lat)
 
-			delta_lon=np.radians(longitude-user_lon)
+    	    	delta_lon=np.radians(longitude-user_lon)
 
-			a=(np.sin(delta_lat/2))*(np.sin(delta_lat/2))+(np.cos(lat1))*(np.cos(lat2))*(np.sin(delta_lon/2))*(np.sin(delta_lon/2))
-			print("a : ",a)
-			c=2*np.arctan2(np.sqrt(a),np.sqrt(1-a))
-			print("c : ",c)
-			d=R*c
-			print("d: ",d)
+    	    	a=(np.sin(delta_lat/2))*(np.sin(delta_lat/2))+(np.cos(lat1))*(np.cos(lat2))*(np.sin(delta_lon/2))*(np.sin(delta_lon/2))
+    	    	print("a : ",a)
+    	    	c=2*np.arctan2(np.sqrt(a),np.sqrt(1-a))
+    	    	print("c : ",c)
+    	    	d=R*c
+    	    	print("d: ",d)
 			#gets (and then prints) the x,y location of the nearest point in data to entered location, accounting for no data values
-			x,y=np.unravel_index(d.argmin(),d.shape)
-			print("x ",x,"y ", y)
-			print('\nThe nearest pixel to your entered location is at: \nLatitude:',latitude[x,y],' Longitude:',longitude[x,y])
+    	    	x,y=np.unravel_index(d.argmin(),d.shape)
+    	    	print("x ",x,"y ", y)
+    	    	print('\nThe nearest pixel to your entered location is at: \nLatitude:',latitude[x,y],' Longitude:',longitude[x,y])
 
-
-
-			if data[x,y]==fillvalue:
-				print('The value of AOD at this pixel is',fillvalue,',(No Value)\n')
-				AOD500nm=0
-			else:
-				print('The value of AOD at this pixel is ',round(data[x,y]*scale_factor,3))
-				AOD500nm=round(data[x,y]*scale_factor,3)
-			aod_value.append(AOD500nm)
-
-
-
-			time = re.compile("\\.\d{4}")
-			time = time.search(filePath)
-			time=time.group(0)
-			print(time)
-
-			date1 = rf'{date}-{time[1:3]}:{time[3:5]}'
-
-
-			datetime.append(date1)
+    	    	if data[x,y]==fillvalue:
+    	    		print('The value of AOD at this pixel is',fillvalue,',(No Value)\n')
+    	    		AOD500nm=0
+    	    	else:
+    	    		print('The value of AOD at this pixel is ',round(data[x,y]*scale_factor,3))
+    	    		AOD500nm=round(data[x,y]*scale_factor,3)
+    	    	aod_value.append(AOD500nm)
+    	    	time = re.compile("\\.\d{4}")
+    	    	time = time.search(filePath)
+    	    	time=time.group(0)
+    	    	print(time)
+    	    	date1 = rf'{date}-{time[1:3]}:{time[3:5]}'
+    	    	datetime.append(date1)
 
 
 
