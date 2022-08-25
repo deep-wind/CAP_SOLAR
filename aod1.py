@@ -371,7 +371,8 @@ if st.button("Predict"):
     ds['Direct Beam'] = ds['Id']
     
     ds['Direct Hz'] = ds['IdnH']
-    
+	
+    ds['Dif Hz'] = ds['Global Hz']-ds['Direct Hz']
     ds['Global Hz'] = ds['GH']
     ds['irradiance'] = ds['Direct Hz']+ ds['Global Hz']
     
