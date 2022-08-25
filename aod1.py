@@ -49,10 +49,12 @@ image = Image.open('aod.jpg')
 st.image(image,width=150)
 
 st.markdown("<h1 style='text-align: left; font-weight:bold;color:black;background-color:white;font-size:11pt;'> Choose any Location </h1>",unsafe_allow_html=True)
+
+m = folium.Map()
+m.add_child(folium.LatLngPopup())
+map = st_folium(m, height=350, width=700)
 try:
-	m = folium.Map()
-	m.add_child(folium.LatLngPopup())
-	map = st_folium(m, height=350, width=700)
+
 	user_lat=map['last_clicked']['lat']
 	user_lon=map['last_clicked']['lon'] 
 
