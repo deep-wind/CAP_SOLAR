@@ -41,188 +41,269 @@ page_title=" CAP Solar ",
 page_icon="🌞"
 )
 
-opener = urllib.request.build_opener()
-opener.addheaders = [('Authorization', 'Bearer cHJhbWlsYV9tYW5pY2thdmFzYWthbjpjSEpoYldsc1lTNHhPVEF4TVRNM1FITnlaV011WVdNdWFXND06MTY2MTI1MTQxNDo4NTJjMWVhYzQyMWExMTNmOGI0ZGI4M2UxNTEwMzRiZTM3ZWZlNzlk')]
-urllib.request.install_opener(opener)
-st.markdown("<h1 style ='color:green; text_align:center;font-family:times new roman;font-weight: bold;font-size:20pt;'>Impact of Aerosols in Solar Power Generation </h1>", unsafe_allow_html=True) 
-image = Image.open('aod.jpg')
-st.image(image,width=150)
 
-st.markdown("<h1 style='text-align: left; font-weight:bold;color:black;background-color:white;font-size:11pt;'> Choose any Location </h1>",unsafe_allow_html=True)
+import numpy as np
+import matplotlib.pyplot as plt
+from PIL import Image
+import random
+import os
 
-m = folium.Map()
-m.add_child(folium.LatLngPopup())
-map = st_folium(m, height=350, width=700)
-try:
+# Security
+#passlib,hashlib,bcrypt,scrypt
+import hashlib
+def make_hashes(password):
+	return hashlib.sha256(str.encode(password)).hexdigest()
 
-	user_lat=map['last_clicked']['lat']
-	user_lon=map['last_clicked']['lng'] 
-
-	st.write(user_lat)
-	st.write(user_lon)
-except:
-	st.warning("No location choosen")
-# folium_static(m)
-# data = io.BytesIO()
-# m.save(data, close_file=False)
-# m.save("index.html")
-#user_lat=st.text_input('\nPlease enter the latitude you would like to analyze (Deg. N): ')
-#user_lon=st.text_input('Please enter the longitude you would like to analyze (Deg. E): ')
-plantsize_type= st.radio("Choose any one of map['last_clicked']['lat']Solar Panel Capacity you want to install",('Individual home/flat','Residential Flat','Commerical Industry'))
-if(plantsize_type=="Individual home/flat"):
-    plantsize=1
-elif(plantsize_type=="Residential Flat"):
-    plantsize=5    
-else:
-    plantsize=50   
-mail=st.text_input('Please enter your mail id: ')
-today = datetime.date.today()-datetime.timedelta(days=1)
-
-date = st.date_input('📅 Date', value = today,max_value=today)
-date=date.strftime("%Y/%m/%d")
-fmt = '%Y/%m/%d'
-dt = datetime.datetime.strptime(date, fmt)
-tt = dt.timetuple()
-julian_day=tt.tm_yday
-st.write(julian_day)
+def check_hashes(password,hashed_text):
+	if make_hashes(password) == hashed_text:
+		return hashed_text
+	return False
+# DB Management
+import sqlite3 
+conn = sqlite3.connect('data.db')
+c = conn.cursor()
+# DB  Functions
+def create_usertable():
+	c.execute('CREATE TABLE IF NOT EXISTS userstable(username TEXT,password TEXT)')
 
 
-if st.button("Predict"):
-    user_lat=float(user_lat)
-    user_lon=float(user_lon)
-    df_map = pd.DataFrame(np.random.randn(1000, 2) / [50, 50] + [user_lat,user_lon],columns=['lat', 'lon'])
-    #st.markdown("<h1 style='text-align: left; font-weight:bold;color:black;background-color:white;font-size:11pt;'> Selected Location </h1>",unsafe_allow_html=True)
-    #st.map(df_map)
-    urlstr='https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/61/MOD04_L2/2022/{}.json'.format(julian_day)
-    st.write(urlstr)
-    urlpath =urlopen(urlstr)
-    print(urlpath)
-    data = json.loads(urlpath.read())
-    print(data)
-    print("***************************************************************")
-    
-    file_list = [x['name'] for x in data if 'name' in x]
-    print(f'Print Title --> {file_list}')
-    print(len(file_list))
-    i=0
-    import os
-    directory = str(julian_day)
-    parent_dir = "data/L3/"
-    path = os.path.join(parent_dir, directory)
-    st.write(path)
-    if not os.path.exists(path):
-        os.makedirs(path)
-    else:
-        
-        if(len(os.listdir(path))>150):
-            pass
-        else:
-            with st.spinner("Downloading the data...."):
-                for file_name in file_list:
-                    print("downloading {}".format(i))                
-                    ladsweb_url = 'https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/61/MOD04_L2/2022/{}/{}'.format(julian_day,file_name)
-                    target_dir = path+"/"+file_name
-                    
-                    urllib.request.urlretrieve(ladsweb_url,target_dir)
-                    i=i+1
-    
-   # file_name=r"C:\Users\PRAMILA\.spyder-py3\project\sih\data\L3\MOD04_L2.A2022218.0000.061.2022218132236.hdf"
-    
-    datetime=[]
-    aod_value=[]
-    columns=['DATETIME','AOD']
+def add_userdata(username,password):
+	c.execute('INSERT INTO userstable(username,password) VALUES (?,?)',(username,password))
+	conn.commit()
 
-    for root, dirs, files in os.walk(path+"/"):
-        for file in files:
-            if os.path.splitext(file)[1] == '.hdf':
-                filePath = os.path.join(root, file)
-    
-                hdf= SD(filePath, SDC.READ)
-                sds=hdf.select('AOD_550_Dark_Target_Deep_Blue_Combined')
-                data=sds.get()
-    
-    
-                # Get lat and lon info
-                lat = hdf.select('Latitude')
-                latitude = lat[:,:]
-                print("latitude: ",latitude)
-                
-                min_lat=latitude.min()
-                max_lat=latitude.max()
-                print("min_lat: ",min_lat)
-                print("max_lat: ",max_lat)
-                
-                lon = hdf.select('Longitude')
-                longitude = lon[:,:]
-                min_lon=longitude.min()
-                max_lon=longitude.max()
-                
-                attributes=sds.attributes()
-                scale_factor=attributes['scale_factor']
-                print("scale_factor  ",scale_factor)
-                fillvalue=attributes['_FillValue']
-                
-                user_lat=float(user_lat)
-                user_lon=float(user_lon)
-                #calculation to find nearest point in data to entered location (haversine formula)
-                R=6371000#radius of the earth in meters
-                
-                #degree to radians
-                
-                lat1=np.radians(user_lat)
-                print("lat1: ",lat1)
-                
-                lat2=np.radians(latitude)
-                print("lat2: ",lat2)
-                
-                delta_lat=np.radians(latitude-user_lat)
-                print("delta_lat: ",delta_lat)
-                
-                delta_lon=np.radians(longitude-user_lon)
-                
-                a=(np.sin(delta_lat/2))*(np.sin(delta_lat/2))+(np.cos(lat1))*(np.cos(lat2))*(np.sin(delta_lon/2))*(np.sin(delta_lon/2))
-                print("a : ",a)
-                c=2*np.arctan2(np.sqrt(a),np.sqrt(1-a))
-                print("c : ",c)
-                d=R*c
-                print("d: ",d)
-                #gets (and then prints) the x,y location of the nearest point in data to entered location, accounting for no data values
-                x,y=np.unravel_index(d.argmin(),d.shape)
-                print("x ",x,"y ", y)
-                print('\nThe nearest pixel to your entered location is at: \nLatitude:',latitude[x,y],' Longitude:',longitude[x,y])
-    
-    
-    
-                if data[x,y]==fillvalue:
-                     	print('The value of AOD at this pixel is',fillvalue,',(No Value)\n')
-                     	AOD500nm=0
-                else:
-                     	print('The value of AOD at this pixel is ',round(data[x,y]*scale_factor,3))
-                     	AOD500nm=round(data[x,y]*scale_factor,3)
-                aod_value.append(AOD500nm)
-                
+def login_user(username,password):
+	c.execute('SELECT * FROM userstable WHERE username =? AND password = ?',(username,password))
+	data = c.fetchall()
+	return data
 
-                
-                time = re.compile("\\.\d{4}")
-                time = time.search(filePath)
-                time=time.group(0)
-                print(time)
-                
-                date1 = rf'{date}-{time[1:3]}:{time[3:5]}'
-                
-                
-                datetime.append(date1)
-                
-                
-                
-    df = pd.DataFrame(list(zip(datetime,aod_value)), columns=columns)
-    st.write(df)
-	
-    df.to_csv("datas.csv")
 
-    ### User Inputs
-    AOD500nm=np.mean(aod_value)
-    st.success("AOD Value {} ".format(round(AOD500nm,3)))
+def view_all_users():
+	c.execute('SELECT * FROM userstable')
+	data = c.fetchall()
+	return data
+
+
+
+
+
+menu = ["Home","Login","SignUp"]
+choice = st.sidebar.selectbox("Menu",menu)
+
+if choice == "Home":
+	st.subheader("Home")
+
+elif choice == "Login":
+	st.subheader("Login Section")
+
+	username = st.sidebar.text_input("User Name")
+	password = st.sidebar.text_input("Password",type='password')
+	if st.sidebar.checkbox("Login"):
+		# if password == '12345':
+		create_usertable()
+		hashed_pswd = make_hashes(password)
+
+		result = login_user(username,check_hashes(password,hashed_pswd))
+		if result:
+			opener = urllib.request.build_opener()
+			opener.addheaders = [('Authorization', 'Bearer cHJhbWlsYV9tYW5pY2thdmFzYWthbjpjSEpoYldsc1lTNHhPVEF4TVRNM1FITnlaV011WVdNdWFXND06MTY2MTI1MTQxNDo4NTJjMWVhYzQyMWExMTNmOGI0ZGI4M2UxNTEwMzRiZTM3ZWZlNzlk')]
+			urllib.request.install_opener(opener)
+			st.markdown("<h1 style ='color:green; text_align:center;font-family:times new roman;font-weight: bold;font-size:20pt;'>Impact of Aerosols in Solar Power Generation </h1>", unsafe_allow_html=True) 
+			image = Image.open('aod.jpg')
+			st.image(image,width=150)
+
+			st.markdown("<h1 style='text-align: left; font-weight:bold;color:black;background-color:white;font-size:11pt;'> Choose any Location </h1>",unsafe_allow_html=True)
+
+			m = folium.Map()
+			m.add_child(folium.LatLngPopup())
+			map = st_folium(m, height=350, width=700)
+			try:
+
+				user_lat=map['last_clicked']['lat']
+				user_lon=map['last_clicked']['lng'] 
+
+				st.write(user_lat)
+				st.write(user_lon)
+			except:
+				st.warning("No location choosen")
+			# folium_static(m)
+			# data = io.BytesIO()
+			# m.save(data, close_file=False)
+			# m.save("index.html")
+			#user_lat=st.text_input('\nPlease enter the latitude you would like to analyze (Deg. N): ')
+			#user_lon=st.text_input('Please enter the longitude you would like to analyze (Deg. E): ')
+			plantsize_type= st.radio("Choose any one of map['last_clicked']['lat']Solar Panel Capacity you want to install",('Individual home/flat','Residential Flat','Commerical Industry'))
+			if(plantsize_type=="Individual home/flat"):
+			    plantsize=1
+			elif(plantsize_type=="Residential Flat"):
+			    plantsize=5    
+			else:
+			    plantsize=50   
+			mail=st.text_input('Please enter your mail id: ')
+			today = datetime.date.today()-datetime.timedelta(days=1)
+
+			date = st.date_input('📅 Date', value = today,max_value=today)
+			date=date.strftime("%Y/%m/%d")
+			fmt = '%Y/%m/%d'
+			dt = datetime.datetime.strptime(date, fmt)
+			tt = dt.timetuple()
+			julian_day=tt.tm_yday
+			st.write(julian_day)
+
+
+			if st.button("Predict"):
+			    user_lat=float(user_lat)
+			    user_lon=float(user_lon)
+			    df_map = pd.DataFrame(np.random.randn(1000, 2) / [50, 50] + [user_lat,user_lon],columns=['lat', 'lon'])
+			    #st.markdown("<h1 style='text-align: left; font-weight:bold;color:black;background-color:white;font-size:11pt;'> Selected Location </h1>",unsafe_allow_html=True)
+			    #st.map(df_map)
+			    urlstr='https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/61/MOD04_L2/2022/{}.json'.format(julian_day)
+			    st.write(urlstr)
+			    urlpath =urlopen(urlstr)
+			    print(urlpath)
+			    data = json.loads(urlpath.read())
+			    print(data)
+			    print("***************************************************************")
+
+			    file_list = [x['name'] for x in data if 'name' in x]
+			    print(f'Print Title --> {file_list}')
+			    print(len(file_list))
+			    i=0
+			    import os
+			    directory = str(julian_day)
+			    parent_dir = "data/L3/"
+			    path = os.path.join(parent_dir, directory)
+			    st.write(path)
+			    if not os.path.exists(path):
+				os.makedirs(path)
+			    else:
+
+				if(len(os.listdir(path))>150):
+				    pass
+				else:
+				    with st.spinner("Downloading the data...."):
+					for file_name in file_list:
+					    print("downloading {}".format(i))                
+					    ladsweb_url = 'https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/61/MOD04_L2/2022/{}/{}'.format(julian_day,file_name)
+					    target_dir = path+"/"+file_name
+
+					    urllib.request.urlretrieve(ladsweb_url,target_dir)
+					    i=i+1
+
+			   # file_name=r"C:\Users\PRAMILA\.spyder-py3\project\sih\data\L3\MOD04_L2.A2022218.0000.061.2022218132236.hdf"
+
+			    datetime=[]
+			    aod_value=[]
+			    columns=['DATETIME','AOD']
+
+			    for root, dirs, files in os.walk(path+"/"):
+				for file in files:
+				    if os.path.splitext(file)[1] == '.hdf':
+					filePath = os.path.join(root, file)
+
+					hdf= SD(filePath, SDC.READ)
+					sds=hdf.select('AOD_550_Dark_Target_Deep_Blue_Combined')
+					data=sds.get()
+
+
+					# Get lat and lon info
+					lat = hdf.select('Latitude')
+					latitude = lat[:,:]
+					print("latitude: ",latitude)
+
+					min_lat=latitude.min()
+					max_lat=latitude.max()
+					print("min_lat: ",min_lat)
+					print("max_lat: ",max_lat)
+
+					lon = hdf.select('Longitude')
+					longitude = lon[:,:]
+					min_lon=longitude.min()
+					max_lon=longitude.max()
+
+					attributes=sds.attributes()
+					scale_factor=attributes['scale_factor']
+					print("scale_factor  ",scale_factor)
+					fillvalue=attributes['_FillValue']
+
+					user_lat=float(user_lat)
+					user_lon=float(user_lon)
+					#calculation to find nearest point in data to entered location (haversine formula)
+					R=6371000#radius of the earth in meters
+
+					#degree to radians
+
+					lat1=np.radians(user_lat)
+					print("lat1: ",lat1)
+
+					lat2=np.radians(latitude)
+					print("lat2: ",lat2)
+
+					delta_lat=np.radians(latitude-user_lat)
+					print("delta_lat: ",delta_lat)
+
+					delta_lon=np.radians(longitude-user_lon)
+
+					a=(np.sin(delta_lat/2))*(np.sin(delta_lat/2))+(np.cos(lat1))*(np.cos(lat2))*(np.sin(delta_lon/2))*(np.sin(delta_lon/2))
+					print("a : ",a)
+					c=2*np.arctan2(np.sqrt(a),np.sqrt(1-a))
+					print("c : ",c)
+					d=R*c
+					print("d: ",d)
+					#gets (and then prints) the x,y location of the nearest point in data to entered location, accounting for no data values
+					x,y=np.unravel_index(d.argmin(),d.shape)
+					print("x ",x,"y ", y)
+					print('\nThe nearest pixel to your entered location is at: \nLatitude:',latitude[x,y],' Longitude:',longitude[x,y])
+
+
+
+					if data[x,y]==fillvalue:
+						print('The value of AOD at this pixel is',fillvalue,',(No Value)\n')
+						AOD500nm=0
+					else:
+						print('The value of AOD at this pixel is ',round(data[x,y]*scale_factor,3))
+						AOD500nm=round(data[x,y]*scale_factor,3)
+					aod_value.append(AOD500nm)
+
+
+
+					time = re.compile("\\.\d{4}")
+					time = time.search(filePath)
+					time=time.group(0)
+					print(time)
+
+					date1 = rf'{date}-{time[1:3]}:{time[3:5]}'
+
+
+					datetime.append(date1)
+
+
+
+			    df = pd.DataFrame(list(zip(datetime,aod_value)), columns=columns)
+			    st.write(df)
+
+			    df.to_csv("datas.csv")
+
+			    ### User Inputs
+			    AOD500nm=np.mean(aod_value)
+			    st.success("AOD Value {} ".format(round(AOD500nm,3)))
+
+
+
+elif choice == "SignUp":
+	st.subheader("Create New Account")
+	new_user = st.text_input("Username")
+	new_password = st.text_input("Password",type='password')
+
+	if st.button("Signup"):
+		create_usertable()
+		add_userdata(new_user,make_hashes(new_password))
+		st.success("You have successfully created a valid Account")
+		st.info("Go to Login Menu to login")
+
+
+
+
+
 #     phi = user_lat
 #     longitude = user_lon
 #     tz = -7
