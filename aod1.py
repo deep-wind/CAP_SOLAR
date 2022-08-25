@@ -184,10 +184,10 @@ if st.button("Predict"):
                 time=time.group(0)
                 print(time)
                 
-                date = rf'{date}-{time[1:3]}:{time[3:5]}'
+                date1 = rf'{date}-{time[1:3]}:{time[3:5]}'
                 
                 
-                datetime.append(date)
+                datetime.append(date1)
                 
                 
                 
