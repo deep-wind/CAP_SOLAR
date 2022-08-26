@@ -114,9 +114,9 @@ if st.button("Predict"):
     print(f'Print Title --> {file_list}')
     print(len(file_list))
     i=0
-    import os
+ """    import os
     directory = str(julian_day)
-    parent_dir = ""
+   parent_dir = "data/"
     path = os.path.join(parent_dir, directory)
     #st.write(path)
     if not os.path.exists(path):
@@ -145,54 +145,46 @@ if st.button("Predict"):
     	for file in sorted_files:
     	    if os.path.splitext(file)[1] == '.hdf':
     	    	#filePath = os.path.join(root, file)
-    	    	filePath="MOD08_M3.A2022182.061.2022216161531.hdf"
-    	    	hdf= SD(filePath, SDC.READ)
-    	    	sds=hdf.select('AOD_550_Dark_Target_Deep_Blue_Combined_Mean_Mean')
-    	    	data=sds.get()
+		"""
+    filePath="MOD08_M3.A2022182.061.2022216161531.hdf"
+    hdf= SD(filePath, SDC.READ)
+    sds=hdf.select('AOD_550_Dark_Target_Deep_Blue_Combined_Mean_Mean')
+    data=sds.get()
+    lat = hdf.select('XDim')
+    latitude = lat[:,:]
+    print("latitude: ",latitude)
+    min_lat=latitude.min()
+    max_lat=latitude.max()
+    print("min_lat: ",min_lat)
+    print("max_lat: ",max_lat)
 
+    lon = hdf.select('YDim')
+    longitude = lon[:,:]
+    min_lon=longitude.min()
+    max_lon=longitude.max()
+    attributes=sds.attributes()
+    scale_factor=attributes['scale_factor']
+    print("scale_factor  ",scale_factor)
+    fillvalue=attributes['_FillValue']
 
-			# Get lat and lon info
-    	    	lat = hdf.select('XDim')
-    	    	latitude = lat[:,:]
-    	    	print("latitude: ",latitude)
-
-    	    	min_lat=latitude.min()
-    	    	max_lat=latitude.max()
-    	    	print("min_lat: ",min_lat)
-    	    	print("max_lat: ",max_lat)
-
-    	    	lon = hdf.select('YDim')
-    	    	longitude = lon[:,:]
-    	    	min_lon=longitude.min()
-    	    	max_lon=longitude.max()
-
-    	    	attributes=sds.attributes()
-    	    	scale_factor=attributes['scale_factor']
-    	    	print("scale_factor  ",scale_factor)
-    	    	fillvalue=attributes['_FillValue']
-
-    	    	user_lat=float(user_lat)
-    	    	user_lon=float(user_lon)
+    user_lat=float(user_lat)
+    user_lon=float(user_lon)
 			#calculation to find nearest point in data to entered location (haversine formula)
-    	    	R=6371000#radius of the earth in meters
-    	    	data_value=data[int(user_lat),int(user_lat)]
-    	    	if (data_value==fillvalue):
-    	    		print('The value of AOD at this pixel is',fillvalue,',(No Value)\n')
-    	    		AOD500nm=0
-    	    	else:
-    	    		print('The value of AOD at this pixel is ',round(data_value*scale_factor,3))
-    	    		AOD500nm=round(data_value*scale_factor,3)
-
-			#degree to radians
-
-
-    	    	aod_value.append(AOD500nm)
-    	    	time = re.compile("\\.\d{4}")
-    	    	time = time.search(filePath)
-    	    	time=time.group(0)
-    	    	print(time)
-    	    	date1 = rf'{date}-{time[1:3]}:{time[3:5]}'
-    	    	datetime.append(date1)
+    	    	#R=6371000#radius of the earth in meters
+    data_value=data[int(user_lat),int(user_lat)]
+    if (data_value==fillvalue):
+    	print('The value of AOD at this pixel is',fillvalue,',(No Value)\n')
+    	AOD500nm=0
+    else:
+    	print('The value of AOD at this pixel is ',round(data_value*scale_factor,3))
+    	AOD500nm=round(data_value*scale_factor,3)
+    aod_value.append(AOD500nm)
+    time = re.compile("\\.\d{4}")
+    time = time.search(filePath)
+    time=time.group(0)
+    print(time)
+    date1 = rf'{date}-{time[1:3]}:{time[3:5]}'
+    datetime.append(date1)
 
 
     
