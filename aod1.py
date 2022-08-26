@@ -114,38 +114,7 @@ if st.button("Predict"):
     print(f'Print Title --> {file_list}')
     print(len(file_list))
     i=0
- """    import os
-    directory = str(julian_day)
-   parent_dir = "data/"
-    path = os.path.join(parent_dir, directory)
-    #st.write(path)
-    if not os.path.exists(path):
-        os.mkdir(path)
-    else:
-    	if(len(os.listdir(path))>150):
-    	   pass
-    	else:
-    	   with st.spinner("Downloading the data...."):
-    	   	for file_name in file_list:
-    	   	    print("downloading {}".format(i))                
-    	   	    ladsweb_url = 'https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/61/MOD08_M3/2022/'.format(julian_day)
-    	   	    #target_dir = path+"/"+file_name
-    	   	    #urllib.request.urlretrieve(ladsweb_url,target_dir)
-    	   	    #i=i+1
-    
 
-   # file_name=r"C:\Users\PRAMILA\.spyder-py3\project\sih\data\L3\MOD04_L2.A2022218.0000.061.2022218132236.hdf"
-
-    datetime=[]
-    aod_value=[]
-    columns=['DATETIME','AOD']
-
-    for root, dirs, files in os.walk(path+"/"):
-    	sorted_files =  sorted(files)
-    	for file in sorted_files:
-    	    if os.path.splitext(file)[1] == '.hdf':
-    	    	#filePath = os.path.join(root, file)
-		"""
     filePath="MOD08_M3.A2022182.061.2022216161531.hdf"
     hdf= SD(filePath, SDC.READ)
     sds=hdf.select('AOD_550_Dark_Target_Deep_Blue_Combined_Mean_Mean')
