@@ -145,7 +145,7 @@ if st.button("Predict"):
     	for file in sorted_files:
     	    if os.path.splitext(file)[1] == '.hdf':
     	    	#filePath = os.path.join(root, file)
-		filePath="MOD08_M3.A2022182.061.2022216161531.hdf"
+    	    	filePath="MOD08_M3.A2022182.061.2022216161531.hdf"
     	    	hdf= SD(filePath, SDC.READ)
     	    	sds=hdf.select('AOD_550_Dark_Target_Deep_Blue_Combined_Mean_Mean')
     	    	data=sds.get()
