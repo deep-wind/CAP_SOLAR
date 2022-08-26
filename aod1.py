@@ -395,7 +395,7 @@ if st.button("Predict"):
     #print(min_index)
     #st.write(ds['Direct Beam'].mean())
     solar_irradiance=(ds['Dif Hz'].mean())+(ds['Direct Hz'].mean())
-    st.info("Avg Solar Irradiance {} W/m2".format(round(solar_irradiance,2)))
+    st.info("Avg Solar Irradiance per day {} W/m2".format(round(solar_irradiance,2)))
 
     #solar_irradiance=ds['ETR'].mean()-diffuse_solar_irradiance`
 	
