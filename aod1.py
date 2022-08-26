@@ -404,7 +404,7 @@ if st.button("Predict"):
     total_electricity=solar_irradiance*0.0036*0.75*plantsize*area
     #savings
     electricity_per_unit=8#8/kwh
-    loss=1-((ds['irradiance'].min())/(ds['irradiance'].max()))
+    loss=((ds['etr'].mean()-total_electricity)/ds['etr'].mean())*100
     st.error("Loss percent {} %".format(loss))	    
 				      
     monthly_savings=(total_electricity/12)*electricity_per_unit
