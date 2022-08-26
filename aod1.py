@@ -116,7 +116,7 @@ if st.button("Predict"):
     i=0
     import os
     directory = str(julian_day)
-    parent_dir = "data/L3/"
+    parent_dir = ""
     path = os.path.join(parent_dir, directory)
     #st.write(path)
     if not os.path.exists(path):
