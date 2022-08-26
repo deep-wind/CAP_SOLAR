@@ -141,7 +141,8 @@ if st.button("Predict"):
     columns=['DATETIME','AOD']
 
     for root, dirs, files in os.walk(path+"/"):
-    	for file in files:
+    	sorted_files =  sorted(files)
+    	for file in sorted_files:
     	    if os.path.splitext(file)[1] == '.hdf':
     	    	filePath = os.path.join(root, file)
     	    	hdf= SD(filePath, SDC.READ)
