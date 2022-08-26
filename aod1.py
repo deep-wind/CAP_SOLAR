@@ -132,7 +132,7 @@ if st.button("Predict"):
     	   	    target_dir = path+"/"+file_name
     	   	    urllib.request.urlretrieve(ladsweb_url,target_dir)
     	   	    i=i+1
-    `
+    
 
    # file_name=r"C:\Users\PRAMILA\.spyder-py3\project\sih\data\L3\MOD04_L2.A2022218.0000.061.2022218132236.hdf"
 
