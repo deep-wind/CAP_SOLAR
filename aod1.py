@@ -128,7 +128,7 @@ if st.button("Predict"):
     	   with st.spinner("Downloading the data...."):
     	   	for file_name in file_list:
     	   	    print("downloading {}".format(i))                
-    	   	    ladsweb_url = 'https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/61/MYD04_L2/2022/{}/{}'.format(julian_day,file_name)
+    	   	    ladsweb_url = 'https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/61/MOD08_M3/2022/{}/{}'.format(julian_day,file_name)
     	   	    target_dir = path+"/"+file_name
     	   	    urllib.request.urlretrieve(ladsweb_url,target_dir)
     	   	    i=i+1
@@ -146,12 +146,12 @@ if st.button("Predict"):
     	    if os.path.splitext(file)[1] == '.hdf':
     	    	filePath = os.path.join(root, file)
     	    	hdf= SD(filePath, SDC.READ)
-    	    	sds=hdf.select('AOD_550_Dark_Target_Deep_Blue_Combined')
+    	    	sds=hdf.select('AOD_550_Dark_Target_Deep_Blue_Combined_Mean_Mean')
     	    	data=sds.get()
 
 
 			# Get lat and lon info
-    	    	lat = hdf.select('Latitude')
+    	    	lat = hdf.select('XDim')
     	    	latitude = lat[:,:]
     	    	print("latitude: ",latitude)
 
@@ -160,7 +160,7 @@ if st.button("Predict"):
     	    	print("min_lat: ",min_lat)
     	    	print("max_lat: ",max_lat)
 
-    	    	lon = hdf.select('Longitude')
+    	    	lon = hdf.select('YDim')
     	    	longitude = lon[:,:]
     	    	min_lon=longitude.min()
     	    	max_lon=longitude.max()
@@ -174,37 +174,17 @@ if st.button("Predict"):
     	    	user_lon=float(user_lon)
 			#calculation to find nearest point in data to entered location (haversine formula)
     	    	R=6371000#radius of the earth in meters
-
-			#degree to radians
-
-    	    	lat1=np.radians(user_lat)
-    	    	print("lat1: ",lat1)
-
-    	    	lat2=np.radians(latitude)
-    	    	print("lat2: ",lat2)
-
-    	    	delta_lat=np.radians(latitude-user_lat)
-    	    	print("delta_lat: ",delta_lat)
-
-    	    	delta_lon=np.radians(longitude-user_lon)
-
-    	    	a=(np.sin(delta_lat/2))*(np.sin(delta_lat/2))+(np.cos(lat1))*(np.cos(lat2))*(np.sin(delta_lon/2))*(np.sin(delta_lon/2))
-    	    	print("a : ",a)
-    	    	c=2*np.arctan2(np.sqrt(a),np.sqrt(1-a))
-    	    	print("c : ",c)
-    	    	d=R*c
-    	    	print("d: ",d)
-			#gets (and then prints) the x,y location of the nearest point in data to entered location, accounting for no data values
-    	    	x,y=np.unravel_index(d.argmin(),d.shape)
-    	    	print("x ",x,"y ", y)
-    	    	print('\nThe nearest pixel to your entered location is at: \nLatitude:',latitude[x,y],' Longitude:',longitude[x,y])
-
-    	    	if data[x,y]==fillvalue:
+    	    	data_value=data[int(user_lat),int(user_lat)]
+    	    	if (data_value==fillvalue):
     	    		print('The value of AOD at this pixel is',fillvalue,',(No Value)\n')
     	    		AOD500nm=0
     	    	else:
-    	    		print('The value of AOD at this pixel is ',round(data[x,y]*scale_factor,3))
-    	    		AOD500nm=round(data[x,y]*scale_factor,3)
+    	    		print('The value of AOD at this pixel is ',round(data_value*scale_factor,3))
+    	    		AOD500nm=round(data_value*scale_factor,3)
+
+			#degree to radians
+
+
     	    	aod_value.append(AOD500nm)
     	    	time = re.compile("\\.\d{4}")
     	    	time = time.search(filePath)
@@ -214,14 +194,10 @@ if st.button("Predict"):
     	    	datetime.append(date1)
 
 
-    df = pd.DataFrame(list(zip(datetime,aod_value)), columns=columns)
-    df.drop(df[df['AOD'] == 0.0].index, inplace = True)
-    st.write(df)
-    df.to_csv("datas.csv")
     
     ### User Inputs
     #st.write(df["AOD"].size)
-    AOD500nm=(df["AOD"].sum())/(df["AOD"].size)
+
     st.success("AOD Value {} ".format(round(AOD500nm,3)))
     phi = user_lat
     longitude = user_lon
@@ -314,12 +290,7 @@ if st.button("Predict"):
             return 0
     ds['T water'] = [T_water(airmass) for airmass in ds['Air Mass']]
     
-    def T_aerosol(airmass):
-        if airmass > 0:
-            return exp(-(Taua**0.873)*(1+Taua-Taua**0.7088)*airmass**0.9108)
-        else:
-            return 0
-    ds['T aerosol'] = [T_aerosol(airmass) for airmass in ds['Air Mass']]
+
     
     def taa(airmass, taerosol):
         if airmass > 0:
