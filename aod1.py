@@ -118,7 +118,7 @@ if st.button("Predict"):
     directory = str(julian_day)
     parent_dir = "data/L3/"
     path = os.path.join(parent_dir, directory)
-    st.write(path)
+    #st.write(path)
     if not os.path.exists(path):
         os.mkdir(path)
     else:
@@ -219,7 +219,7 @@ if st.button("Predict"):
     df.to_csv("datas.csv")
     
     ### User Inputs
-    st.write(df["AOD"].size)
+    #st.write(df["AOD"].size)
     AOD500nm=(df["AOD"].sum())/(df["AOD"].size)
     st.success("AOD Value {} ".format(round(AOD500nm,3)))
     phi = user_lat
