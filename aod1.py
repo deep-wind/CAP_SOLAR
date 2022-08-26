@@ -87,12 +87,12 @@ mail=st.text_input('Please enter your mail id: ')
 
 today = datetime.date.today()-datetime.timedelta(days=1)
 
-#date = st.date_input('📅 Date', value = today,max_value=today)
-#date=date.strftime("%Y/%m/%d")
-#fmt = '%Y/%m/%d'
-#dt = datetime.datetime.strptime(date, fmt)
-#tt = dt.timetuple()
-#julian_day=tt.tm_yday
+date = st.date_input('📅 Date', value = today,max_value=today)
+date=date.strftime("%Y/%m/%d")
+fmt = '%Y/%m/%d'
+dt = datetime.datetime.strptime(date, fmt)
+tt = dt.timetuple()
+julian_day=tt.tm_yday
 ##st.write(julian_day)
 
 
@@ -355,7 +355,7 @@ if st.button("Predict"):
     
     #ds[11:15]
     
-    st.write(ds)
+    #``st.write(ds)
     pylab.rcParams['figure.figsize'] = 16, 6  # this sets the default image size for this session
     
     ax = ds[ds['DOY']==212].plot('HR',['Global Hz','Direct Hz','Dif Hz'],title='Bird Clear Sky Model Results')
