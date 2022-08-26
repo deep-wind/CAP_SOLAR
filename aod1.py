@@ -87,12 +87,12 @@ mail=st.text_input('Please enter your mail id: ')
 
 today = datetime.date.today()-datetime.timedelta(days=1)
 
-date = st.date_input('📅 Date', value = today,max_value=today)
-date=date.strftime("%Y/%m/%d")
-fmt = '%Y/%m/%d'
-dt = datetime.datetime.strptime(date, fmt)
-tt = dt.timetuple()
-julian_day=tt.tm_yday
+#date = st.date_input('📅 Date', value = today,max_value=today)
+#date=date.strftime("%Y/%m/%d")
+#fmt = '%Y/%m/%d'
+#dt = datetime.datetime.strptime(date, fmt)
+#tt = dt.timetuple()
+#julian_day=tt.tm_yday
 ##st.write(julian_day)
 
 
@@ -128,10 +128,10 @@ if st.button("Predict"):
     	   with st.spinner("Downloading the data...."):
     	   	for file_name in file_list:
     	   	    print("downloading {}".format(i))                
-    	   	    ladsweb_url = 'https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/61/MOD08_M3/2022/{}/{}'.format(julian_day,file_name)
-    	   	    target_dir = path+"/"+file_name
-    	   	    urllib.request.urlretrieve(ladsweb_url,target_dir)
-    	   	    i=i+1
+    	   	    ladsweb_url = 'https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/61/MOD08_M3/2022/'.format(julian_day)
+    	   	    #target_dir = path+"/"+file_name
+    	   	    #urllib.request.urlretrieve(ladsweb_url,target_dir)
+    	   	    #i=i+1
     
 
    # file_name=r"C:\Users\PRAMILA\.spyder-py3\project\sih\data\L3\MOD04_L2.A2022218.0000.061.2022218132236.hdf"
@@ -144,7 +144,8 @@ if st.button("Predict"):
     	sorted_files =  sorted(files)
     	for file in sorted_files:
     	    if os.path.splitext(file)[1] == '.hdf':
-    	    	filePath = os.path.join(root, file)
+    	    	#filePath = os.path.join(root, file)
+		filePath="MOD08_M3.A2022182.061.2022216161531.hdf"
     	    	hdf= SD(filePath, SDC.READ)
     	    	sds=hdf.select('AOD_550_Dark_Target_Deep_Blue_Combined_Mean_Mean')
     	    	data=sds.get()
